@@ -19,51 +19,53 @@ import acm.util.RandomGenerator;
 public class HW4 extends GraphicsProgram {
 
 	public void run() {
+		
 		GImage original = new GImage(IMAGE_NAME);
+		setSize ((int)original.getWidth()*2+1, (int) original.getHeight());
 		GImage raidImage = new GImage(IMAGE_NAME);
 		
 		// initialize arrays
 		initArray (original);
 		
-		//* RAID 1 *//
+		//* RAID 1 - mirroring *//
 		//create new discs using raid 1
-		raid1(original);
+		//raid1(original);
 		
 		// print contents of the discs
 //		printDisc(disc1);
 		//printDisc (disc2);
 		
 		//fail a disc randomly
-		failRaid(1);
+		//failRaid(1);
 		
 		// print contents of the disc after fail
 		//printDisc(disc1);
 		//printDisc (disc2);
 		
 		// create a new image from raid 1 and save
-		raidImage = createRaidImage(1);
+		//raidImage = createRaidImage(1);
 		
-		//* RAID 0 *//
+		//* RAID 0 - stripping *//
 		//* Raid 0 create, fail and recovery *//
 		//create new discs using raid 0
-		//raid0(original);
+		raid0(original);
 		// fail raid 0
-		//failRaid(0);
+		failRaid(0);
 		// print contents of the disc after fail
 		//printDisc(disc1);
 		//printDisc (disc2);
 		//create image after raid 0
-		//raidImage = createRaidImage(0);
+		raidImage = createRaidImage(0);
 				
 		//display two images
 		double xc = getWidth() / 2;
 		double yc = getHeight() / 2;
 		double x0 = xc - (original.getWidth() + raidImage.getWidth() + IMAGE_SEP) / 2;
 		double x1 = x0 + original.getWidth() + IMAGE_SEP;
-		add(original, x0, yc - original.getHeight() / 2);
+		add(original, 0, yc - original.getHeight() / 2);
 		add(raidImage, x1, yc - raidImage.getHeight() / 2);
-		double xArrow = x1 - (ARROW_LENGTH + IMAGE_SEP) / 2;
-		addArrow(xArrow, yc, xArrow + ARROW_LENGTH, yc);
+		//double xArrow = x1 - (ARROW_LENGTH + IMAGE_SEP) / 2;
+		//addArrow(xArrow, yc, xArrow + ARROW_LENGTH, yc);
 	}
 	
 	/*
@@ -119,12 +121,12 @@ public class HW4 extends GraphicsProgram {
 	 * Mirror the image data into two discs for raid 0
 	 */
 	private int[][] createImageRaid0fromTwoDiscs (int[] disc1, int[] disc2) {
-		
 		int[][] array = new int [imageHeight][imageWidth];
-		println("new array size " + imageHeight + " height " + imageWidth + "height");
+		//println("new array size " + imageHeight + " height " + imageWidth + "height");
 		
 		int arrayRowIndex = 0;
 		int arrayColIndex = 0;
+		
 		for (int disc1Index=0; disc1Index<disc1.length; disc1Index++) {
 			array [arrayRowIndex][arrayColIndex] = disc1[disc1Index];
 			arrayColIndex += 2;
@@ -133,7 +135,7 @@ public class HW4 extends GraphicsProgram {
 				arrayColIndex = 0;
 			}
 		}
-		printArray(array);
+		//printArray(array);
 
 		return array;
 	}
@@ -232,21 +234,13 @@ public class HW4 extends GraphicsProgram {
 		default:
 		}
 	}
-	/*
-	 * Initialize the size of the new image
-	 */
-	private void initArray(GImage image) {
-		GDimension dim = image.getSize();
-		imageWidth = (int) dim.getWidth();
-		imageHeight = (int) dim.getHeight() ;
-		//println(dim.getHeight() + " height " + dim.getWidth() + " width");
-	}
+	
 	
 	
 	/*
 	 * Create Raid 1 volumes on two discs
 	 */
-	private void raid1(GImage image) {
+	private void raid0(GImage image) {
 		int[][] array = image.getPixelArray();
 		
 		//println("image size " + array.length + " height " + array[0].length + "height");
@@ -267,8 +261,6 @@ public class HW4 extends GraphicsProgram {
 		for (int row =0; row<array.length; row++) {
 			for (int col = 0; col < array[row].length; col++) {
 				int currentPixelValue = array[row][col];
-				
-//				printBytes();
 				//print("&"+ currentPixelValue);
 				if ((disc1Index + disc2Index) % 2 == 0) {
 					disc1[disc1Index] = currentPixelValue;
@@ -312,6 +304,16 @@ public class HW4 extends GraphicsProgram {
 		}
 		
 	}
+	
+	/*
+	 * Initialize the size of the new image
+	 */
+	private void initArray(GImage image) {
+		GDimension dim = image.getSize();
+		imageWidth = (int) dim.getWidth();
+		imageHeight = (int) dim.getHeight() ;
+		println(dim.getHeight() + " height " + dim.getWidth() + " width");
+	}
 	/*
 	 * Adds an arrow to the canvas connecting the points (x0, y0)
 	 * and (x1, y1).
@@ -336,7 +338,7 @@ public class HW4 extends GraphicsProgram {
 	/* Private constants */
 	private static final double IMAGE_SEP = 50;
 	private static final double ARROWHEAD_SIZE = 8;
-	private static final String IMAGE_NAME = "HW4.jpg";
+	private static final String IMAGE_NAME = "HW.png";
 	private static final double ARROW_LENGTH = IMAGE_SEP / 2;
 	private int[] disc1;
 	private int[] disc2;
