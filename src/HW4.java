@@ -19,8 +19,8 @@ import acm.util.RandomGenerator;
 public class HW4 extends GraphicsProgram {
 
 	public void run() {
-		GImage original = new GImage("Candle.gif");
-		GImage raidImage = new GImage("Candle.gif");
+		GImage original = new GImage(IMAGE_NAME);
+		GImage raidImage = new GImage(IMAGE_NAME);
 		
 		// initialize arrays
 		initArray (original);
@@ -74,7 +74,7 @@ public class HW4 extends GraphicsProgram {
 	private GImage createRaidImage(int raid) {
 		double xc = getWidth() / 2;
 		double yc = getHeight() / 2;
-		GImage newImage = new GImage ("Candle.gif");
+		GImage newImage = new GImage (IMAGE_NAME);
 		switch (raid) {
 		case 1: 
 			//int [][] array1 = createImageRaid1fromTwoDiscs(disc1, disc2);
@@ -163,7 +163,7 @@ public class HW4 extends GraphicsProgram {
 	 * Create a new image from  raid 0 discs
 	 */
 	private GImage createRaidImageOld(int raid) {
-		GImage newImage = new GImage("Candle.gif");
+		GImage newImage = new GImage(IMAGE_NAME);
 		switch (raid) {
 		case 1: 
 			int [][] array = createImagefromTwoDiscs(disc1, disc2);
@@ -336,6 +336,7 @@ public class HW4 extends GraphicsProgram {
 	/* Private constants */
 	private static final double IMAGE_SEP = 50;
 	private static final double ARROWHEAD_SIZE = 8;
+	private static final String IMAGE_NAME = "HW4.jpg";
 	private static final double ARROW_LENGTH = IMAGE_SEP / 2;
 	private int[] disc1;
 	private int[] disc2;
