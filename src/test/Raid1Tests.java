@@ -1,14 +1,14 @@
 package test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 
-import org.junit.Test;
+import org.junit.BeforeClass;
 
 public class Raid1Tests {
 
-	@Test
-	public void test() {
-		fail("Not yet implemented");
+	@BeforeClass
+	public static void initialize() {
+		assertNotNull("[ERROR] Failed to initialize test image.", AutoGrader.testImage);
 	}
 
 }
