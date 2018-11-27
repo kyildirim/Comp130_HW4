@@ -1,48 +1,55 @@
 /*
- * File: FlipVertical.java
+ * File: HW4.java
  * -----------------------
- * This program tests the flipVertical method from Chapter 11.
+ * This program saving of image data using RAID0, 1, 10 and 5 using
+ * multidimensional arrays. Discs on raid structure is simulated
+ * using single dimensional array.
+ * The program reads in an image data, converts into 2D int array.
+ * It simulates the failure of the disc by randomly changing the
+ * contents of the disc (array). It constructs a new image
+ * out of the raid discs and displays the original and the new image 
+ * on canvas.
  */
 
 import acm.graphics.*;
 import acm.program.*;
 import acm.util.RandomGenerator;
 
-/**
- * This class tests the flipVertical method.
- */
+
 public class HW4 extends GraphicsProgram {
 
 	public void run() {
 		GImage original = new GImage("Candle.gif");
 		GImage raidImage = new GImage("Candle.gif");
 		
-		// print details of the image
+		// initialize arrays
 		initArray (original);
+		
+		//* RAID 1 *//
 		//create new discs using raid 1
 		raid1(original);
 		
-		// print contents of the disc
+		// print contents of the discs
 //		printDisc(disc1);
 		//printDisc (disc2);
+		
 		//fail a disc randomly
 		failRaid(1);
 		
-		// print contents of the disc
+		// print contents of the disc after fail
 		//printDisc(disc1);
 		//printDisc (disc2);
-		//recover image 
-		recoverRaid1();
 		
-		// create image after recover from raid 1 and save
+		// create a new image from raid 1 and save
 		raidImage = createRaidImage(1);
 		
+		//* RAID 0 *//
 		//* Raid 0 create, fail and recovery *//
 		//create new discs using raid 0
 		//raid0(original);
 		// fail raid 0
 		//failRaid(0);
-		// print contents of the disc
+		// print contents of the disc after fail
 		//printDisc(disc1);
 		//printDisc (disc2);
 		//create image after raid 0
@@ -59,6 +66,11 @@ public class HW4 extends GraphicsProgram {
 		addArrow(xArrow, yc, xArrow + ARROW_LENGTH, yc);
 	}
 	
+	/*
+	 * Create Raid images 
+	 * @param 
+	 * raid : specify which raid volume to use (e.g. 0, 1, 5, 10)
+	 */
 	private GImage createRaidImage(int raid) {
 		double xc = getWidth() / 2;
 		double yc = getHeight() / 2;
@@ -68,28 +80,26 @@ public class HW4 extends GraphicsProgram {
 			//int [][] array1 = createImageRaid1fromTwoDiscs(disc1, disc2);
 			int [][] array1 = createImagefromTwoDiscs(disc1, disc2);
 			newImage = new GImage(array1);
-			add(newImage, xc, yc - newImage.getHeight() / 2);
-			
-			
+			add(newImage, xc, yc - newImage.getHeight() / 2);		
 			break;
 		case 5: break;
 		case 10: break;
 		case 0: 
 			int [][] array0 = createImageRaid0fromTwoDiscs(disc1, disc2);
-			newImage = new GImage(array0);
-			
-			add(newImage, xc, yc - newImage.getHeight() / 2);
-			
-			break;
-		
+			newImage = new GImage(array0);		
+			add(newImage, xc, yc - newImage.getHeight() / 2);		
+			break;		
 		default:
 		}
 		return newImage;
 		
 	}
+	/*
+	 * Strip the image data into two discs for raid 1
+	 */
 	private int[][] createImageRaid1fromTwoDiscs (int[] disc1, int[] disc2) {
 		int[][] array = new int [imageHeight][imageWidth];
-		println("new array size " + imageHeight + " height " + imageWidth + "height");
+		//println("new array size " + imageHeight + " height " + imageWidth + "height");
 		
 		int arrayRowIndex = 0;
 		int arrayColIndex = 0;
@@ -103,11 +113,12 @@ public class HW4 extends GraphicsProgram {
 		}
 		printArray(array);
 
-		return array;
-		
-		
+		return array;		
 	}
-private int[][] createImageRaid0fromTwoDiscs (int[] disc1, int[] disc2) {
+	/*
+	 * Mirror the image data into two discs for raid 0
+	 */
+	private int[][] createImageRaid0fromTwoDiscs (int[] disc1, int[] disc2) {
 		
 		int[][] array = new int [imageHeight][imageWidth];
 		println("new array size " + imageHeight + " height " + imageWidth + "height");
@@ -127,6 +138,9 @@ private int[][] createImageRaid0fromTwoDiscs (int[] disc1, int[] disc2) {
 		return array;
 	}
 
+	/*
+	 * Create a new image from  raid 1 discs
+	 */
 	private int[][] createImagefromTwoDiscs (int[] disc1, int[] disc2) {
 		int[][] array = new int [imageHeight][imageWidth];
 		println("new array size " + imageHeight + " height " + imageWidth + "height");
@@ -145,6 +159,9 @@ private int[][] createImageRaid0fromTwoDiscs (int[] disc1, int[] disc2) {
 
 		return array;
 	}
+	/*
+	 * Create a new image from  raid 0 discs
+	 */
 	private GImage createRaidImageOld(int raid) {
 		GImage newImage = new GImage("Candle.gif");
 		switch (raid) {
@@ -163,6 +180,9 @@ private int[][] createImageRaid0fromTwoDiscs (int[] disc1, int[] disc2) {
 		}
 		return newImage;
 	}
+	/*
+	 * Fail dics1 used for Raid 0 and Raid 1
+	 */
 	private void failDisc1() {
 		println("failing disc1");
 		for (int i = 0; i< disc1.length; i++) {
@@ -173,6 +193,9 @@ private int[][] createImageRaid0fromTwoDiscs (int[] disc1, int[] disc2) {
 			disc1[p1] = temp;
 		}
 	}
+	/*
+	 * Fail dics2 used for Raid 0 and Raid 1
+	 */
 	private void failDisc2() {
 		println("failing disc2");
 		for (int i = 0; i< disc2.length; i++) {
@@ -185,6 +208,11 @@ private int[][] createImageRaid0fromTwoDiscs (int[] disc1, int[] disc2) {
 			disc2[p2] = temp;
 		}
 	}
+	/*
+	 * Fail discs used for Raid Volumes
+	 * @param 
+	 * raid : specify the type of the raid
+	 */
 	private void failRaid(int raid) {
 		int disc = 0; 
 		switch (raid) {
@@ -204,23 +232,19 @@ private int[][] createImageRaid0fromTwoDiscs (int[] disc1, int[] disc2) {
 		default:
 		}
 	}
+	/*
+	 * Initialize the size of the new image
+	 */
 	private void initArray(GImage image) {
 		GDimension dim = image.getSize();
 		imageWidth = (int) dim.getWidth();
 		imageHeight = (int) dim.getHeight() ;
 		//println(dim.getHeight() + " height " + dim.getWidth() + " width");
 	}
-	private void printDisc(int[] disc){
-		println("printing dics");
-		for (int i =0; i< disc1.length; i++) {
-			print(disc[i]+ " ");
-		}
-		println();
-	}
+	
 	
 	/*
-	 * Creates a new image which consists of the bits in the original
-	 * flipped vertically around the center line.
+	 * Create Raid 1 volumes on two discs
 	 */
 	private void raid1(GImage image) {
 		int[][] array = image.getPixelArray();
@@ -244,7 +268,6 @@ private int[][] createImageRaid0fromTwoDiscs (int[] disc1, int[] disc2) {
 			for (int col = 0; col < array[row].length; col++) {
 				int currentPixelValue = array[row][col];
 				
-//				bytes = new Integer(currentPixelValue).toString().getBytes();
 //				printBytes();
 				//print("&"+ currentPixelValue);
 				if ((disc1Index + disc2Index) % 2 == 0) {
@@ -256,55 +279,32 @@ private int[][] createImageRaid0fromTwoDiscs (int[] disc1, int[] disc2) {
 				}
 			}
 			
+		}	
+		// Your code ends here	
+	}
+	/*
+	 * Display the contents of a disc
+	 * @param 
+	 * int [] disc - the array showing the contents of a disc
+	 */
+	private void printDisc(int[] disc){
+		println("printing dics");
+		for (int i =0; i< disc1.length; i++) {
+			print(disc[i]+ " ");
 		}
-		
-		
-		// Your code ends here
-	
+		println();
 	}
-
-	public void printBytes() {
-		//println("printing bytes");
-		print("{");
-		for (int i = 0; i < bytes.length; i++) {
-			
-			print(bytes[i] + "<");
-		}
-		print("}");
-	}
-	public static long getUInt32(byte[] bytes) {
-	    long value = byteAsULong(bytes[0]) | (byteAsULong(bytes[1]) << 8) | (byteAsULong(bytes[2]) << 16) | (byteAsULong(bytes[3]) << 24);
-	    return value;
-	}
-	public static long byteAsULong(byte b) {
-	    return ((long)b) & 0x00000000000000FFL; 
-	}
-	private void failRaid1() {
-		
-	}
-	
-	private void recoverRaid1() {
-		
-	}
-	private void createRaid1Image() {
-		
-	}
+	/*
+	 * Display the contents of the image data on 2D array
+	 * @param 
+	 * int [][] disc - image data
+	 */
 	private void printArray(int[][] array) {
 		
 		
 		for (int i =0; i<array.length; i++) {
 			for (int k=0; k<array[i].length; k++) {
 				int pixel = array[i][k];
-//				byte[] mybyte = new byte [] {
-//					(byte)(pixel >>> 24), 
-//					(byte)(pixel >>> 16), 
-//					(byte)(pixel >>> 8), 
-//					(byte)(pixel) 
-//				};
-//				print(pixel + "-");
-//				for (int m =0; m < mybyte.length; m++) {
-//					print(mybyte[m] +"/");
-//				}
 				print(pixel);
 				//print("[" + GImage.getAlpha(pixel)+ "/"+ GImage.getRed(pixel) + "/" +GImage.getGreen(pixel) + "/" + GImage.getBlue(pixel) + "]");
 			}
@@ -341,7 +341,6 @@ private int[][] createImageRaid0fromTwoDiscs (int[] disc1, int[] disc2) {
 	private int[] disc2;
 	private int[] disc3;
 	private int[] disc4;
-	byte[] bytes;
 	int imageWidth = 0;
 	int imageHeight = 0;
 
