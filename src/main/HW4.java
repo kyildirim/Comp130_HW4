@@ -1,4 +1,3 @@
-package main;
 /*
  * File: HW4.java
  * -----------------------
@@ -11,7 +10,7 @@ package main;
  * out of the raid discs and displays the original and the new image 
  * on canvas.
  */
-
+package main;
 import acm.graphics.*;
 import acm.program.*;
 import acm.util.RandomGenerator;
@@ -39,12 +38,11 @@ public class HW4 extends GraphicsProgram {
 		
 		int userSelection = -1;
 		while (userSelection == -1) {
-			userSelection = readInt("Select 1, 0, or 10: ");
-			//userSelection = 0;
+			//userSelection = readInt("Select 1, 0, or 10: ");
+			userSelection = 1;
 
 			switch (userSelection){
-			case 0:
-				
+			case 0:		
 				// Raid 0 create, fail and recovery //
 				//create new discs using raid 0
 				createRaid0Discs(original);
@@ -60,8 +58,11 @@ public class HW4 extends GraphicsProgram {
 				//println("raid 1");
 				//create new discs using raid 0
 				createRaid1Discs(original);
+				
 				// fail raid 0
 				failRaid(1);
+				printDisc(disc1);
+				printDisc(disc2);
 				//create image after raid 0
 				raidImage = createRaidImage(1);
 				break;
@@ -130,10 +131,9 @@ public class HW4 extends GraphicsProgram {
 			newImage = new GImage(array0);			
 			break;		
 		case 1: 
-			//int [][] array1 = createImageRaid1fromTwoDiscs();
-			//newImage = new GImage(array1);
-			//writeImageFile(array1, "1");
-			//readImageFile("1");	
+			int [][] array1 = createImageRaid1fromOneDisc();
+			newImage = new GImage(array1);
+			writeImageFile(array1, "1");	
 			break;
 		case 10: 
 			//writeImageFile(array10, "10");
@@ -154,18 +154,11 @@ public class HW4 extends GraphicsProgram {
 				array5 = createImageRaid5fromTwoDiscs(disc1, disc2);
 					
 				break;
-			}
-			newImage = new GImage(array5);		
-//			add(newImage, xc, yc - newImage.getHeight() / 2);	
-//			int [][] array5 = createImageRaid5fromThreeDiscs();
-//			newImage = new GImage(array5);		
-//			add(newImage, xc, yc - newImage.getHeight() / 2);	
-			break;
+			
 			*/
 
 		}
-		return newImage;
-		
+		return newImage;		
 	}
 	
 	
@@ -179,7 +172,9 @@ public class HW4 extends GraphicsProgram {
 		int disc = 0; 
 		switch (raid) {
 		case 1: case 0:
-			disc = rgen.nextInt(1);
+			disc = rgen.nextInt(1,2);
+			println("failing " + disc);
+			failDisc = disc;
 			if (disc == 1) {
 				// fail disc 1
 				failDisc1();
@@ -207,6 +202,9 @@ public class HW4 extends GraphicsProgram {
 		case 10:
 			break;
 		}
+		//printDisc(disc1);
+		//printDisc(disc2);
+		
 		//Your code ends here
 	}
 
@@ -267,10 +265,7 @@ public class HW4 extends GraphicsProgram {
 				disc2Index++;
 			}		
 		}	
-		writeImageFile(array, "P1");
-		int[][] pixels = readImageFile("P1");
-		GImage afterReadImage = new GImage(pixels);
-		add(afterReadImage, 0, 0);
+		
 		
 		// Your code ends here
 	}
@@ -286,10 +281,8 @@ public class HW4 extends GraphicsProgram {
 	 * Initialize the size of the new image
 	 */
 	private void initArray(GImage image) {
-
 		imageWidth = (int) image.getWidth();
 		imageHeight = (int) image.getHeight() ;
-		//println(image.getHeight() + " height " + image.getWidth() + " width");
 	}
 	private void printArray(int[][] array) {	
 		for (int i =0; i<array.length; i++) {
@@ -330,7 +323,6 @@ public class HW4 extends GraphicsProgram {
 	private void failDisc2() {
 		println("failing disc2");
 		//replace by black
-		//for (int i = 0; i< 100; i++) {
 		for (int i = 0; i< disc2.length; i++) {
 			//if (rgen.nextBoolean()) { // random fail
 			if (i%5== 0) { // controlled fail
@@ -376,14 +368,12 @@ public class HW4 extends GraphicsProgram {
 
 
 	/*
-	 * Create pixesls from striped image data from one disc for raid 0
+	 * Create pixesls from striped image data from two discs for raid 0
 	 */
 	private int[][] createImageRaid0fromTwoDiscs () {
 		
 		int[][] array = new int [imageHeight][imageWidth];
-		//printArrayDetails(array);
-		//println("new array size " + imageHeight + " height " + imageWidth + "height");
-		
+		//printArrayDetails(array);	
 		int arrayRowIndex = 0;
 		int arrayColIndex = 0;
 		
@@ -411,31 +401,43 @@ public class HW4 extends GraphicsProgram {
 			}
 		}
 		writeImageFile (array, "Raid0");
-		//printArray(array);
-		
-		printArray(readImageFile("Raid0"));
 
 		return array;
 	}
 	/*
 	 * Create pixels from mirrored data on two discs for raid 1
 	 */
-	private int[][] createImageRaid1fromTwoDiscs (int[] disc1, int[] disc2) {
+	private int[][] createImageRaid1fromOneDisc () {
 		int[][] array = new int [imageHeight][imageWidth];
-		//println("new array size " + imageHeight + " height " + imageWidth + "height");
-		
+		//printDisc(disc1);
+		//printDisc(disc2);
 		int arrayRowIndex = 0;
 		int arrayColIndex = 0;
-		for (int disc1Index=0; disc1Index<disc1.length; disc1Index++) {
-			array [arrayRowIndex][arrayColIndex] = disc1[disc1Index];
-			arrayColIndex++;
-			
-			if (arrayColIndex == array[0].length && disc1Index!=0) {
-				arrayRowIndex++;
-				arrayColIndex = 0;
+		if (failDisc == 1 ) {
+			for (int disc1Index=0; disc1Index<disc1.length; disc1Index++) {
+				array [arrayRowIndex][arrayColIndex] = disc1[disc1Index];
+				arrayColIndex++;
+				
+				if (arrayColIndex == array[0].length && disc1Index!=0) {
+					arrayRowIndex++;
+					arrayColIndex = 0;
+				}
+			}
+		} else if (failDisc == 2){
+			for (int disc2Index=0; disc2Index<disc2.length; disc2Index++) {
+				array [arrayRowIndex][arrayColIndex] = disc2[disc2Index];
+				arrayColIndex++;
+				
+				if (arrayColIndex == array[0].length && disc2Index!=0) {
+					arrayRowIndex++;
+					arrayColIndex = 0;
+				}
 			}
 		}
-		//printArray(array);
+		println("in creating 1 image");
+		printDisc(disc1);
+		printDisc(disc2);
+		printArray(array);
 
 		return array;		
 	}
@@ -521,6 +523,7 @@ public class HW4 extends GraphicsProgram {
 	private int[] disc2;
 	private int[] disc3;
 	private int[] disc4;
+	int failDisc = 1;
 	int imageWidth = 0;
 	int imageHeight = 0;
 }
