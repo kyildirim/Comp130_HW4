@@ -23,5 +23,5 @@ public class AutoGrader {
 	
 	public static GImage testImage;
 	
-	private static final String TEST_IMAGE = "HW4.jpg";
+	private static final String TEST_IMAGE = "HW.png";
 }

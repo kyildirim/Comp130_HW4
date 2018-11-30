@@ -11,13 +11,17 @@
  * on canvas.
  */
 package main;
-import acm.graphics.*;
-import acm.program.*;
-import acm.util.RandomGenerator;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import acm.graphics.GImage;
+import acm.program.GraphicsProgram;
 // IO lib
-import acm.util.*;
-import java.io.*;
-import java.util.*;
+import acm.util.ErrorException;
+import acm.util.RandomGenerator;
 
 
 public class HW4 extends GraphicsProgram {
@@ -38,8 +42,8 @@ public class HW4 extends GraphicsProgram {
 		
 		int userSelection = -1;
 		while (userSelection == -1) {
-			//userSelection = readInt("Select 1, 0, or 10: ");
-			userSelection = 1;
+			userSelection = readInt("Select 1, 0, or 10: ");
+			//userSelection = 1;
 
 			switch (userSelection){
 			case 0:		
@@ -211,7 +215,7 @@ public class HW4 extends GraphicsProgram {
 	/*
 	 * Create Raid 0 volume on two discs
 	 */
-	private void createRaid0Discs(GImage image) {
+	public void createRaid0Discs(GImage image) {
 		//Your code starts here
 		int[][] array = image.getPixelArray();
 
@@ -242,7 +246,7 @@ public class HW4 extends GraphicsProgram {
 	/*
 	 * Create Raid 1 volume on two discs
 	 */
-	private void createRaid1Discs(GImage image) {
+	public void createRaid1Discs(GImage image) {
 		//Your code starts here
 		int[][] array = image.getPixelArray();
 		int numberPixels = array.length * array[0].length;
@@ -519,8 +523,8 @@ public class HW4 extends GraphicsProgram {
 	/* Instance variable */
 	private RandomGenerator rgen = RandomGenerator.getInstance();
 	private  String imageNameInput = "";
-	private int[] disc1;
-	private int[] disc2;
+	public int[] disc1;
+	public int[] disc2;
 	private int[] disc3;
 	private int[] disc4;
 	int failDisc = 1;
