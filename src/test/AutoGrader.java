@@ -9,7 +9,7 @@ import org.junit.runners.Suite.SuiteClasses;
 import acm.graphics.GImage;
 
 @RunWith(Suite.class)
-@SuiteClasses({Raid0Tests.class, Raid1Tests.class, Raid5Tests.class, Raid10Tests.class})
+@SuiteClasses({MenuTests.class, Raid0Tests.class, Raid1Tests.class, Raid5Tests.class, Raid10Tests.class})
 public class AutoGrader {
 	
 	@ClassRule

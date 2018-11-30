@@ -1,3 +1,4 @@
+package main;
 /*
  * File: HW4.java
  * -----------------------
@@ -38,8 +39,8 @@ public class HW4 extends GraphicsProgram {
 		
 		int userSelection = -1;
 		while (userSelection == -1) {
-			//userSelection = readInt("Select 1, 0, or 10: ");
-			userSelection = 0;
+			userSelection = readInt("Select 1, 0, or 10: ");
+			//userSelection = 0;
 
 			switch (userSelection){
 			case 0:
