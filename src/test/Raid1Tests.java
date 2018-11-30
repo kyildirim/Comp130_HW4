@@ -2,6 +2,7 @@ package test;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -13,13 +14,29 @@ public class Raid1Tests {
 	@BeforeClass
 	public static void initialize() {
 		assertNotNull("[ERROR] Failed to initialize test image.", AutoGrader.testImage);
+		assertNotNull("[ERROR] Failed to initialize ErrorCollector", AutoGrader.errorCollector);
 	}
 	
 	@Test
 	public void testDisks(){
 		HW4 MainClass = new HW4();
 		MainClass.createRaid1Discs(AutoGrader.testImage);
-		assertArrayEquals(MainClass.disc1, MainClass.disc2);
+		try{
+			assertNotNull(MainClass.disc1);
+		}catch (Throwable t){
+			AutoGrader.errorCollector.addError(t); //Null-check disc
+		}
+		try{
+			assertNotNull(MainClass.disc2); //Null-check disc
+		}catch (Throwable t){
+			AutoGrader.errorCollector.addError(t);
+		}
+		try{
+			assertArrayEquals(MainClass.disc1, MainClass.disc2); //Check if disc contents are the same
+		}catch (Throwable t){
+			AutoGrader.errorCollector.addError(t);
+		}
+		
 	}
 
 }

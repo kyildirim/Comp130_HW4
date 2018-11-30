@@ -1,6 +1,8 @@
 package test;
 
 import org.junit.ClassRule;
+import org.junit.Rule;
+import org.junit.rules.ErrorCollector;
 import org.junit.rules.ExternalResource;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -11,6 +13,9 @@ import acm.graphics.GImage;
 @RunWith(Suite.class)
 @SuiteClasses({MenuTests.class, Raid0Tests.class, Raid1Tests.class, Raid5Tests.class, Raid10Tests.class})
 public class AutoGrader {
+	
+	@ClassRule
+    public static ErrorCollector errorCollector = new ErrorCollector();
 	
 	@ClassRule
 	public static ExternalResource testImageRule = new ExternalResource(){
