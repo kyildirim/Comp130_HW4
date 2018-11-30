@@ -1,7 +1,6 @@
 package test;
 
 import org.junit.ClassRule;
-import org.junit.Rule;
 import org.junit.rules.ErrorCollector;
 import org.junit.rules.ExternalResource;
 import org.junit.runner.RunWith;

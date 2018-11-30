@@ -1,13 +1,10 @@
 package test;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.BeforeClass;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ErrorCollector;
 
 import main.HW4;
 
@@ -19,6 +16,7 @@ public class Raid0Tests {
 		assertNotNull("[ERROR] Failed to initialize ErrorCollector", AutoGrader.errorCollector);
 	}
 	
+	@SuppressWarnings("static-method")
 	@Test
 	public void testDisks(){
 		HW4 MainClass = new HW4();
